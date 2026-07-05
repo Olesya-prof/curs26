@@ -1,0 +1,30 @@
+from turtle import *
+from math import sin,pi
+shape('turtle')
+colormode(255)
+speed(5)
+
+penup()
+goto(-150, 0)
+pendown()
+color('red')
+begin_fill()
+circle(50)
+end_fill()
+penup()
+goto(0, -80)
+pendown()
+color('blue')
+begin_fill()
+circle(80)
+end_fill()
+penup()
+goto(150, 0)
+pendown()
+color('green')
+begin_fill()
+circle(40)
+end_fill()
+
+
+mainloop()
