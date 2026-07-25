@@ -30,7 +30,7 @@ def update_t_lb(event):
     t_lb.config(text=name)
 
 
-def update_b1_lb():
+def update_b1_lb(event):
     code = b1_combobox.get()
     name = currencies[code]
     b1_lb.config(text=name)
@@ -42,23 +42,31 @@ def exchange():
     base_code = b_combobox.get()
     base1_code = b1_combobox.get()
 
-    if target_code and base_code:
+    if target_code and base_code and base1_code:
+
         try:
-            response = requests.get(f"https://open.er-api.com/v6/latest/{base_code}")
-            response.raise_for_status()
-            data = response.json()
+            response1 = requests.get(f"https://open.er-api.com/v6/latest/{base_code}")
+            response1.raise_for_status()
+            data1 = response1.json()
+
+            response2 = requests.get(f"https://open.er-api.com/v6/latest/{base1_code}")
+            response2.raise_for_status()
+            data2 = response2.json()
 
             base_name = currencies.get(base_code, base_code)
+            base1_name = currencies.get(base1_code, base1_code)
             target_name = currencies.get(target_code,target_code)
 
-            if target_code in data['rates']:
-                rate = data['rates'][target_code ]
+            if target_code in data1['rates'] and target_code in data2['rates']:
+                rate1 = data1['rates'][target_code ]
+                rate2 = data2['rates'][target_code]
 
                 message = (
                     f"Курс обмена к {target_name} ({target_code}):\n\n"
-                    f"{base_code}({base_name}) = {rate:.2f}{target_code}\n\n"
+                    f" 1 {base_code} ({base_name}) = {rate1:.2f} {target_code}\n\n"
+                    f" 2 {base1_code} ({base1_name}) = {rate2:.2f} {target_code}"
                 )
-                mb.showinfo("Курс обмена", message)
+                mb.showinfo("Курсы обмена", message)
 
             else:
                 mb.showerror("Ошибка", f"Валюта {target_code} не найдена")
@@ -72,7 +80,7 @@ win.title('Курс обмена валюты')
 win.geometry ('360x400')
 
 lb =ttk.Label(win, text='Первая базовая валюта')
-lb.pack(padx=10, pady=10)
+lb.pack(padx=10, pady=5)
 
 b_combobox = ttk.Combobox(values=list(currencies.keys()))
 b_combobox.pack(padx=10, pady=5)
