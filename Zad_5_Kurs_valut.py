@@ -36,7 +36,6 @@ def update_b1_lb(event):
     b1_lb.config(text=name)
 
 
-
 def exchange():
     target_code = t_combobox.get()
     base_code = b_combobox.get()
@@ -83,6 +82,7 @@ lb =ttk.Label(win, text='Первая базовая валюта')
 lb.pack(padx=10, pady=5)
 
 b_combobox = ttk.Combobox(values=list(currencies.keys()))
+b_combobox.set('USD')
 b_combobox.pack(padx=10, pady=5)
 b_combobox.bind("<<ComboboxSelected>>", update_b_lb)
 
@@ -93,6 +93,7 @@ lb = Label(win, text="Вторая базовая валюта")
 lb.pack(padx=10, pady=5)
 
 b1_combobox = ttk.Combobox(values=list(currencies.keys()))
+b1_combobox.set('EUR')
 b1_combobox.pack(padx=10, pady=5)
 b1_combobox.bind("<<ComboboxSelected>>", update_b1_lb)
 
@@ -103,13 +104,12 @@ lb = Label(win, text="Целевая валюта")
 lb.pack(padx=10, pady=5)
 
 t_combobox = ttk.Combobox(values=list(currencies.keys()))
+t_combobox.set('RUB')
 t_combobox.pack(padx=10, pady=5)
 t_combobox.bind("<<ComboboxSelected>>", update_t_lb)
 
 t_lb = ttk.Label(win, text="Выберите валюту")
 t_lb.pack(padx=10, pady=10)
-
-
 
 bt = ttk.Button(win, text="Получить курс обмена", command=exchange)
 bt.pack(padx=10, pady=10)
