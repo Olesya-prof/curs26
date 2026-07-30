@@ -12,11 +12,39 @@ coins = {
     'dogecoin': 'DOGE'
 }
 
+# Получает курсы и обновляет таблицу
+def get_prices():
+    try:
+        ids = ','.join(coins.keys()) # получает все id монет из словаря
+        url = f'https://api.coingecko.com/api/v3/simple/price?ids={ids}&vs_currencies=usd&include_24hr_change=true'
+        data = requests.get(url, timeout=5).json() # отправляет GET-запрос по URL,ждёт ответа максимум 5 сек
+
+        # Очищаем таблицу
+        for row in table.get_children():
+            table.delete(row)
+
+        # Заполняем таблицу
+        for coin_id, symbol in coins.items() :
+            if coin_id in data:
+                price = data[coin_id]['usd']
+                table.insert('', 'end', values=(
+                    coin_id.capitalize(),
+                    symbol,
+                    f'${price:,.2f}'
+                ))
+
+        # Обновляем время , текст на метке
+        time_lb.config (text=f'Обновлено: {datetime.now().strftime("%H:%M:%S")}')
+
+    except Exception as e:
+        time_lb.config(text='Ошибка! Проверьте интернет')
+
+
 root = tk.Tk()
 root.title('Курсы криптовалют')
 root.geometry ('450x350')
 # Кнопка обновления
-btn = tk.Button(root, text='Обновить курсы')
+btn = tk.Button(root, text='Обновить курсы', command=get_prices, bg='green', fg='white')
 btn.pack(pady=10)
 # Время обновления
 time_lb = tk.Label(root, text='Обновлено: --')
@@ -30,5 +58,8 @@ table.column('name', width=120)
 table.column('symbol', width=80)
 table.column('price', width=100)
 table.pack(pady=10, padx=10)
+
+# Загружаем сразу при запуске
+get_prices()
 
 root.mainloop()
