@@ -39,7 +39,7 @@ def get_prices():
 
     except Exception as e:
         time_lb.config(text='Ошибка! Проверьте интернет')
-        status_lb(text='Ошибка загрузки', fg='red')
+        status_lb.config(text='Ошибка загрузки', fg='red')
 
 root = tk.Tk()
 root.title('Курсы криптовалют')
@@ -52,7 +52,7 @@ time_lb = tk.Label(root, text='Обновлено: --')
 time_lb.pack()
 
 status_lb = tk.Label(root, text='Статус: --', fg='gray')
-status_lb.pack(side=tk.BOTTOM , pady=10)
+status_lb.pack(side='bottom' , pady=10)
 # таблица
 table = ttk.Treeview(root,columns=('name', 'symbol', 'price'), show='headings', height=8)
 table.heading('name', text='Криптовалюта')
